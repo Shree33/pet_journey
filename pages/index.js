@@ -22,9 +22,24 @@ const Home = () => {
 
     const data = await response.json();
     const { output } = data;
-    console.log("OpenAI replied...", output.text)
-
     setApiOutput(`${output.text}`);
+    setIsGenerating(false);
+  }
+  const callImageEndpoint = async () => {
+    setIsGenerating(true);
+
+    console.log("Calling OpenAI...")
+    const response = await fetch('/api/generateImage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userInput }),
+    });
+
+    const data = await response.json();
+    const { output } = data;
+    setApiOutput(`${output}`);
     setIsGenerating(false);
   }
   const onUserChangedText = (event) => {
@@ -53,7 +68,7 @@ const Home = () => {
             <div className="prompt-buttons">
               <a
                 className={isGenerating ? 'generate-button loading' : 'generate-button'}
-                onClick={callGenerateEndpoint}
+                onClick={callImageEndpoint}
               >
                 <div className="generate">
                 {isGenerating ? <span className="loader"></span> : <p>Generate</p>}

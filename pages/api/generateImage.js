@@ -13,7 +13,6 @@ const generateImage = async (req, res) => {
   prompt:`${req.body.userInput}`,
   n: 1,
   size: "512x512",
-  response_format: "b64_jason"
 });
 image_url = response.data.data[0].url;
 res.status(200).json({ output: image_url });

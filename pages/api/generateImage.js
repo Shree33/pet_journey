@@ -1,21 +1,29 @@
-import { Configuration, OpenAIApi } from 'openai';
+const QSTASH = `https://qstash.upstash.io/v1/publish/`;
+const DALL_E = "https://api.openai.com/v1/images/generations";
+const VERCEL_URL = "pet-journey.vercel.app";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
-
-
-const generateImage = async (req, res) => {
-  console.log(`API: ${req.body.userInput}`)
-  const response = await openai.createImage({
-  prompt:`${req.body.userInput}`,
-  n: 1,
-  size: "512x512",
-});
-image_url = response.data.data[0].url;
-res.status(200).json({ output: image_url });
+export default async function handler(req,res) {
+  const { prompt } = req.query;
+  try {
+    const response = await fetch(`${QSTASH + DALL_E}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
+        "upstash-forward-Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+        "Upstash-Callback": `${VERCEL_URL}/api/callback`,
+      },
+      body: JSON.stringify({
+        prompt,
+        n: 1,
+        size: "512x512",
+      }),
+    });
+    const json = await response.json();
+    return res.status(202).json({ id: json.messageId });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message, type: "Internal server error" });
+  }
 }
-
-export default generateImage;

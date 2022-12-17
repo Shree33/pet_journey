@@ -1,11 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import redis from "../../utils/redis";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req, res) {
   const { body } = req;
+  console.log ("body", body);
   try {
     const decoded = atob(body.body);
     await redis.set(body.sourceMessageId, decoded);
@@ -13,3 +11,4 @@ export default async function handler(
   } catch (error) {
     return res.status(500).json({ error });
   }
+}

@@ -18,16 +18,6 @@ Narrative:
 
 export default async function handler(req,res) {
   const { prompt }  = req.query;
-  // const imagePromptCompletion = await openai.createCompletion({
-  //   model: 'text-davinci-003',
-  //   prompt: `${imagePromptPrefix}${userInput}`,
-  //   temperature: 0.87,
-  //   max_tokens: 700,
-  // });
-  // console.log('userInput', req.query)
-  // const imagePrompt = imagePromptCompletion.data.choices.pop();
-  
-  // const { prompt } = imagePrompt.text;
   try {
     const response = await fetch(`${QSTASH}${DALL_E}`, {
       method: "POST",

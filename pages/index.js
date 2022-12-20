@@ -31,7 +31,7 @@ export default function Home() {
 
   async function callGenerateImage() {
     setLoadingImage(true);
-    const prompt = `${petDescription} ${storyInput} ${imageStyle} 4k high quality`;
+    const prompt = `${petDescription} ${storyInput} ${imageStyle} 4k high quality illustration colorful`;
     const response = await fetch(`/api/generateImage?prompt=${ prompt }`);
     const json = await response.json();
     setMessageId(json.id);
@@ -40,7 +40,6 @@ export default function Home() {
     setIsGenerating(true);
     callGenerateImage();
     const prompt = `${petName} is a ${petDescription}. Today, ${petName} ${storyInput}`;
-    console.log('prompt', prompt)
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {

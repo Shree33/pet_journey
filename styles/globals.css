@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap');
 
 body {
@@ -10,7 +14,7 @@ body {
     display: flex;
     place-content: center flex-start;
     align-items: center;
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(1, 0, 38, 0.89);
     flex-flow: column nowrap;
     gap: 10px;
     height: 100vh;
@@ -72,12 +76,45 @@ body {
     display: flex;
     flex: 0 0 auto;
     flex-flow: column nowrap;
-    gap: 16px;
+    gap: 1px;
     height: min-content;
     padding: 0px;
     width: min-content;
 }
-
+.small-prompt {
+    border-bottom-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-style: solid;
+    border-top-width: 1px;
+    place-content: flex-start;
+    align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: column nowrap;
+    gap: 10px;
+    height: 50px;
+    overflow: hidden;
+    padding-left: 20px;
+    padding-top: 10px;
+    position: relative;
+    width: 300px;
+    max-width: 1200px;
+    overflow: auto;
+    outline: none;
+    resize: none;
+    font-size: 16px;
+    font-style: normal;
+    letter-spacing: 0px;
+    line-height: 1.6em;
+    text-align: start;
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    text-transform: none;
+}
 .prompt-box {
     border-bottom-width: 1px;
     border-color: rgba(255, 255, 255, 0.1);
@@ -93,9 +130,10 @@ body {
     flex: 0 0 auto;
     flex-flow: column nowrap;
     gap: 10px;
-    height: 150px;
+    height: 100px;
     overflow: hidden;
-    padding: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
     position: relative;
     width: 610px;
     max-width: 1200px;

@@ -3,14 +3,19 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useInterval } from "../utils/use-interval";
 
+
+
 export default function Home() {
   const [loading, setLoadingImage] = useState(false);
   const [messageId, setMessageId] = useState("");
   const [image, setImage] = useState(null);
   const [canShowImage, setCanShowImage] = useState(false);
-  const [userInput, setUserInput] = useState('');
-  const [apiOutput, setApiOutput] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [apiOutput, setApiOutput] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [storyInput, setStoryInput] = useState('');
+  const [petName, setPetName] = useState('');
+  const [petDescription, setPetDescription] = useState('');
+  const [imageStyle, setImageStyle] = useState('');
 
   useInterval(
     async () => {
@@ -26,19 +31,22 @@ export default function Home() {
 
   async function callGenerateImage() {
     setLoadingImage(true);
-    const response = await fetch(`/api/generateImage?prompt=${ userInput }`);
+    const prompt = `${petDescription} ${storyInput} ${imageStyle} 4k high quality`;
+    const response = await fetch(`/api/generateImage?prompt=${ prompt }`);
     const json = await response.json();
     setMessageId(json.id);
   }
   async function callGenerateEndpoint() {
     setIsGenerating(true);
     callGenerateImage();
+    const prompt = `${petName} is a ${petDescription}. Today, ${petName} ${storyInput}`;
+    console.log('prompt', prompt)
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userInput }),
+      body: JSON.stringify({ prompt }),
     });
 
     const data = await response.json();
@@ -47,10 +55,23 @@ export default function Home() {
     setIsGenerating(false);
   }
   function fillExample() {
-    setUserInput("Katsu, the male bunny, has an adventurous time at the zoo.");
+    setPetName("Katsu")
+    setPetDescription("a brown bunny who loves to play with yarn.");
+    setStoryInput("has an adventurous time at the zoo.");
+    setImageStyle("Walt Disney")
   }
-  function onUserChangedText(event) {
-    setUserInput(event.target.value);
+  // TODO: refactor to use one function for all inputs
+  function onUserChangedPetDescription(event) {
+    setPetDescription(event.target.value);
+  }
+  function onUserChangedStory(event) {
+    setStoryInput(event.target.value);
+  }
+  function onUserChangedName(event) {
+    setPetName(event.target.value);
+  }
+  function onUserChangedImageStyle(event) {
+    setImageStyle(event.target.value);
   }
   const showLoadingState = loading || (image && !canShowImage);
 
@@ -70,10 +91,29 @@ export default function Home() {
         </div>
         <div className="prompt-container">
             <textarea
+              className="small-prompt"
+              placeholder="Please Enter Your Pet's Name."
+              value={petName}
+              onChange={onUserChangedName}
+            />;
+            <textarea
               className="prompt-box"
-              placeholder="start typing here"
-              value={userInput}
-              onChange={onUserChangedText}
+              placeholder="Describe your pet."
+              value={petDescription}
+              onChange={onUserChangedPetDescription}
+            />;
+            {/* TODO: Make the placeholder take in pet's name to create better prompt. */}
+            <textarea
+              className="prompt-box"
+              placeholder= "What is their adventure today?"
+              value={storyInput}
+              onChange={onUserChangedStory}
+            />;
+            <textarea
+              className="small-prompt"
+              placeholder= "How do you want the image to look?"
+              value={imageStyle}
+              onChange={onUserChangedImageStyle}
             />;
             <div className="prompt-buttons">
               <a className='example-button' onClick={fillExample}>
@@ -121,59 +161,4 @@ export default function Home() {
       </div>
     </div>
   );
-  // return (
-  //   <>
-  //     <div>
-  //       <div>
-  //         <form
-  //           onSubmit={submitForm}
-  //         >
-  //           <input
-  //             type="text"
-  //             placeholder="Prompt for DALL-E"
-  //             onChange={(e) => setPrompt(e.target.value)}
-  //           />
-  //           <button
-  //             type="submit"
-  //           >
-  //             {showLoadingState && (
-  //               <svg
-  //                 xmlns="http://www.w3.org/2000/svg"
-  //                 fill="none"
-  //                 viewBox="0 0 24 24"
-  //               >
-  //                 <circle
-  //                   cx="12"
-  //                   cy="12"
-  //                   r="10"
-  //                   stroke="currentColor"
-  //                   strokeWidth="4"
-  //                 ></circle>
-  //                 <path
-  //                   fill="currentColor"
-  //                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-  //                 ></path>
-  //               </svg>
-  //             )}
-  //             {!showLoadingState ? "Generate" : ""}
-  //           </button>
-  //         </form>
-  //         <div>
-  //           {image && (
-  //             <div>
-  //               <Image
-  //                 alt={`Dall-E representation of: ${prompt}`}
-  //                 src={image}
-  //                 fill={true}
-  //                 onLoadingComplete={() => {
-  //                   setCanShowImage(true);
-  //                 }}
-  //               />
-  //             </div>
-  //           )}
-  //           </div>
-  //         </div>
-  //       </div>
-  //   </>
-  // );
 }

@@ -1,17 +1,41 @@
 const QSTASH = `https://qstash.upstash.io/v1/publish/`;
 const DALL_E = "https://api.openai.com/v1/images/generations";
-const VERCEL_URL = "pet-journey.vercel.app";
+// const VERCEL_URL = "pet-journey.vercel.app";
+import { Configuration, OpenAIApi } from 'openai';
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
+
+const imagePromptPrefix = 
+`
+Take the narrative below and generate 1 image prompt that highlight the story's key moments. Emphasize details about the main character.
+
+Narrative:
+
+`
 
 export default async function handler(req,res) {
-  const { prompt } = req.query;
+  const { prompt }  = req.query;
+  // const imagePromptCompletion = await openai.createCompletion({
+  //   model: 'text-davinci-003',
+  //   prompt: `${imagePromptPrefix}${userInput}`,
+  //   temperature: 0.87,
+  //   max_tokens: 700,
+  // });
+  // console.log('userInput', req.query)
+  // const imagePrompt = imagePromptCompletion.data.choices.pop();
+  
+  // const { prompt } = imagePrompt.text;
   try {
-    const response = await fetch(`${QSTASH + DALL_E}`, {
+    const response = await fetch(`${QSTASH}${DALL_E}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.QSTASH_TOKEN}`,
-        "upstash-forward-Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Upstash-Forward-Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json",
-        "Upstash-Callback": `${VERCEL_URL}/api/callback`,
+        "Upstash-Callback": `https://pet-journey.vercel.app/api/callback`,
       },
       body: JSON.stringify({
         prompt,

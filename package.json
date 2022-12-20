@@ -12,6 +12,7 @@
     "@babel/core": "^7.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@upstash/qstash": "^0.3.2",
     "@upstash/redis": "^1.18.1",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",

@@ -31,7 +31,7 @@ export default function Home() {
 
   async function callGenerateImage() {
     setLoadingImage(true);
-    const prompt = `${petDescription} ${storyInput} ${imageStyle} 4k high quality illustration colorful`;
+    const prompt = `${petDescription} ${storyInput} ${imageStyle} 4k high quality illustration colof`;
     const response = await fetch(`/api/generateImage?prompt=${ prompt }`);
     const json = await response.json();
     setMessageId(json.id);

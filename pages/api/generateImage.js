@@ -1,12 +1,7 @@
 const QSTASH = `https://qstash.upstash.io/v1/publish/`;
 const DALL_E = "https://api.openai.com/v1/images/generations";
-// const VERCEL_URL = "pet-journey.vercel.app";
-import { Configuration, OpenAIApi } from 'openai';
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+//const VERCEL_URL = "pet-journey.vercel.app";
 
-const openai = new OpenAIApi(configuration);
 
 const imagePromptPrefix = 
 `
